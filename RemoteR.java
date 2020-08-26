@@ -5,10 +5,14 @@
  */
 package com.mycompany.lab;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author nico4
  */
 public class RemoteR {
-    
+    //Atributos
+    List<Commit> listaCommits = new ArrayList<>();   
 }

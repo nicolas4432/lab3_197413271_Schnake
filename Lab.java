@@ -56,30 +56,71 @@ public class Lab {
                     }
 
                 case "1":
-                    if (repoCreado == 1){
+                    if (repoCreado == 0){
+                        System.out.println("Repositorio no creado");
+                        break;
+                    }                    
+                    else if (repoCreado == 1){
                         repositorio.add(repositorio);
                     }
-                    System.out.println("1");
                     break;
 
                 case "2":
-                    System.out.println("2");
+                    if (repoCreado == 0){
+                        System.out.println("Repositorio no creado");
+                        break;
+                    }                    
+                    else if (repoCreado == 1){
+                        repositorio.commit(repositorio);
+                    }
                     break;
 
                 case "3":
-                    System.out.println("3");
+                    if (repoCreado == 0){
+                        System.out.println("Repositorio no creado");
+                        break;
+                    }                    
+                    else if (repoCreado == 1){
+                        repositorio.pull(repositorio);
+                    }
                     break;
 
                 case "4":
-                    System.out.println("4");
+                    if (repoCreado == 0){
+                        System.out.println("Repositorio no creado");
+                        break;
+                    }                    
+                    else if (repoCreado == 1){
+                        repositorio.push(repositorio);
+                    }
                     break;
 
                 case "5":
-                    System.out.println("5");
+                    if (repoCreado == 0){
+                        System.out.println("Repositorio no creado");
+                        break;
+                    }                    
+                    else if (repoCreado == 1){                      
+                        System.out.println("#########################");
+                        System.out.println("Nombre Repositorio: " + repositorio.repoGet(repositorio, "nombre"));
+                        System.out.println("Nombre del autor: " + repositorio.repoGet(repositorio, "autor"));
+                        System.out.println("Número de archivos en el Workspace: " + repositorio.workspace.listaArchivos.size());
+                        System.out.println("Número de archivos en el Index: " + repositorio.index.listaArchivos.size());
+                        System.out.println("Número de commits en el Local Repository: " + repositorio.local.listaCommits.size());
+                        if (repositorio.local.listaCommits.size() == repositorio.remote.listaCommits.size()){
+                            System.out.println("El Remote Repository está al día con los cambios del Local Repository");
+                        } else{
+                            System.out.println("El Remote Repository no está al día con los cambios del Local Repository");
+                        }                        
+                    }
                     break;
 
                 case "6":
                     if (repoCreado == 0){
+                        System.out.println("Repositorio no creado");
+                        break;
+                    }                    
+                    else if (repoCreado == 0){
                         System.out.println("Repositorio no creado");
                         break;
                     }
