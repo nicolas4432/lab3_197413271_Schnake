@@ -5,6 +5,8 @@
  */
 package com.mycompany.lab;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,11 +23,6 @@ public class Repo {
     RemoteR remote = new RemoteR();
     LocalR local = new LocalR();
     
-    //Contructor
-    public Repo(String autor, String nombreRepositorio){
-        this.autor = autor;
-        this.nombreR = nombreRepositorio;
-    }
     
     //Metodos
     public void addWork(Repo repositorio){
@@ -49,7 +46,7 @@ public class Repo {
     public void add(Repo repositorio){
         Scanner in = new Scanner(System.in);
         String nombreArchivo = "";
-        TextoArchivo archivo;
+//        TextoArchivo archivo;
         int largoIndex = 0;
         int estabaEnIndex;
         
@@ -58,7 +55,7 @@ public class Repo {
         
         //Para ver todos los archivos del workspace
         for (TextoArchivo archivoEnLista : repositorio.workspace.listaArchivos){             
-            System.out.println("-" + archivoEnLista.obtenerDato(archivoEnLista, "nombre"));
+            System.out.println("-" + archivoEnLista.datoGet(archivoEnLista, "nombre"));
         } 
         System.out.println("Ingrese nombre archivos, para salir escribir 00");
         
@@ -68,25 +65,28 @@ public class Repo {
             for (TextoArchivo archivoEnLista : repositorio.workspace.listaArchivos){
                 estabaEnIndex = 0;
                 //Si el archivo ingresado esta
-                if(nombreArchivo.equals(archivoEnLista.obtenerDato(archivoEnLista, "nombre"))){
+                if(nombreArchivo.equals(archivoEnLista.datoGet(archivoEnLista, "nombre"))){
                     //Recorro los archivos del index 
                     for (TextoArchivo archivoEnListaI : repositorio.index.listaArchivos){
                        largoIndex = largoIndex + 1;  
                         //Si el archivo esta en index
-                        if(nombreArchivo.equals(archivoEnListaI.obtenerDato(archivoEnListaI, "nombre"))){
+                        if(nombreArchivo.equals(archivoEnListaI.datoGet(archivoEnListaI, "nombre"))){
                             estabaEnIndex = 1;
                             //y el contenido es distinto
-                            if(!(archivoEnLista.obtenerDato(archivoEnLista, "contenido")).equals(archivoEnListaI.obtenerDato(archivoEnListaI, "contenido"))){
+                            if(!(archivoEnLista.datoGet(archivoEnLista, "contenido")).equals(archivoEnListaI.datoGet(archivoEnListaI, "contenido"))){
                             repositorio.index.listaArchivos.remove(archivoEnListaI);
-                            archivo = archivoEnLista;
+                            //Creo nuevo archivo
+                            TextoArchivo archivo = new TextoArchivo();                         
+                            archivo.datoSet(archivoEnLista.datoGet(archivoEnLista, "fecha"), archivoEnLista.datoGet(archivoEnLista, "nombre"), archivoEnLista.datoGet(archivoEnLista, "contenido"));
                             repositorio.index.listaArchivos.add(archivo);
                             break;
                             }
                             break;
                         }
                     }
-                    if (estabaEnIndex == 0){
-                        archivo = archivoEnLista;
+                    if (estabaEnIndex == 0){                        
+                        TextoArchivo archivo = new TextoArchivo();                    
+                        archivo.datoSet(archivoEnLista.datoGet(archivoEnLista, "fecha"), archivoEnLista.datoGet(archivoEnLista, "nombre"), archivoEnLista.datoGet(archivoEnLista, "contenido"));
                         repositorio.index.listaArchivos.add(archivo);
                         break;
                     }
@@ -99,11 +99,11 @@ public class Repo {
         //}
         
      }
-    
+    //Error al verificar si un archivo esta en la lista cambiar el metodo de busqueda
     public void commit(Repo repositorio){
         Scanner in = new Scanner(System.in);
         Commit ultimoCommit;
-        TextoArchivo archivosCommit;
+        //TextoArchivo archivosCommit;
         int largoIndex = 0;
         
         System.out.println("");
@@ -114,8 +114,10 @@ public class Repo {
         
         Commit nuevoCommit = new Commit(autorC, comentario);
         
+        //Copio todos los archivos del index al commit
         for (TextoArchivo archivoEnListaI : repositorio.index.listaArchivos){
-            archivosCommit = archivoEnListaI;
+            TextoArchivo archivosCommit = new TextoArchivo();                          
+            archivosCommit.datoSet(archivoEnListaI.datoGet(archivoEnListaI, "fecha"), archivoEnListaI.datoGet(archivoEnListaI, "nombre"), archivoEnListaI.datoGet(archivoEnListaI, "contenido"));
             nuevoCommit.listaArchivos.add(archivosCommit);
             largoIndex = largoIndex + 1;
         }
@@ -125,13 +127,17 @@ public class Repo {
             for (TextoArchivo archivo : ultimoCommit.listaArchivos){
                 //Si el archivo no esta ni nuevo commit y en la lista de diferencias se agrega
                 if((nuevoCommit.listaArchivos.indexOf(archivo) == -1 && nuevoCommit.diferencias.indexOf(archivo) == -1)){
-                    archivosCommit = archivo;
+              //if(archivo.datoGet(archivo, "nombre") ==     
+                    TextoArchivo archivosCommit = new TextoArchivo();                        
+                    archivosCommit.datoSet(archivo.datoGet(archivo, "fecha"), archivo.datoGet(archivo, "nombre"), archivo.datoGet(archivo, "contenido"));
                     nuevoCommit.diferencias.add(archivosCommit);                    
                 }
             }
             for (TextoArchivo archivo : nuevoCommit.listaArchivos){
+                //Si el archivo no estaba en el commit anterior ni en la lista de diferencias
                  if((ultimoCommit.listaArchivos.indexOf(archivo) == -1 && nuevoCommit.diferencias.indexOf(archivo) == -1)){
-                    archivosCommit = archivo;
+                    TextoArchivo archivosCommit = new TextoArchivo();                           
+                    archivosCommit.datoSet(archivo.datoGet(archivo, "fecha"), archivo.datoGet(archivo, "nombre"), archivo.datoGet(archivo, "contenido"));
                     nuevoCommit.diferencias.add(archivosCommit);                    
                 }               
             }
@@ -148,7 +154,7 @@ public class Repo {
         
     }
     
-    public void pull(Repo repositorio){
+    public void push(Repo repositorio){
         Commit comentario;
         
         for (Commit comentarioLocal : repositorio.local.listaCommits){
@@ -159,14 +165,13 @@ public class Repo {
         }
     }
     
-    public void push(Repo repositorio){
-        TextoArchivo archivo;
-        
-        for (Commit commitRocal : repositorio.local.listaCommits){
-            for (TextoArchivo archivoDeRemote : commitRocal.listaArchivos){
+    public void pull(Repo repositorio){ //error 
+        for (Commit commitRemote : repositorio.remote.listaCommits){
+            for (TextoArchivo archivoDeRemote : commitRemote.listaArchivos){
                 if (repositorio.workspace.listaArchivos.indexOf(archivoDeRemote) == -1){
-                archivo = archivoDeRemote;
-                repositorio.workspace.listaArchivos.add(archivo);
+                    TextoArchivo archivo = new TextoArchivo();                          
+                    archivo.datoSet(archivoDeRemote.datoGet(archivoDeRemote, "fecha"), archivoDeRemote.datoGet(archivoDeRemote, "nombre"), archivoDeRemote.datoGet(archivoDeRemote, "contenido"));
+                    repositorio.workspace.listaArchivos.add(archivo);
                 }
             }
         }       
@@ -186,5 +191,10 @@ public class Repo {
                 break;                        
         }        
         return datoDevuelto;
+    }
+    
+    public void repoSet(String autor, String nombre){  
+        this.autor = autor;
+        this.nombreR = nombre;
     }
 }

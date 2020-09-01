@@ -18,16 +18,16 @@ public class TextoArchivo {
         String contenido;
         
         // Constructor
-        public TextoArchivo(String nombre, String contenido) {
-            Date fechaActual = new Date();
-            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");
-            this.fecha = formatoFecha.format(fechaActual);
-            this.nombre = nombre;
-            this.contenido = contenido;
-        }
+        //public TextoArchivo(String nombre, String contenido) {
+            //Date fechaActual = new Date();
+            //SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");
+            //this.fecha = formatoFecha.format(fechaActual);
+            //this.nombre = nombre;
+            //this.contenido = contenido;
+        //}
         
         //Metodos
-        public String obtenerDato(TextoArchivo archivo, String dato){
+        public String datoGet(TextoArchivo archivo, String dato){
             String devolvio = new String();
             switch(dato){
                 case "nombre":
@@ -44,4 +44,11 @@ public class TextoArchivo {
             }
             return devolvio;
         }
+        
+        public void datoSet(String fecha, String nombre, String contenido){
+            this.fecha = fecha;
+            this.nombre = nombre;
+            this.contenido = contenido;
+        }
 }
+

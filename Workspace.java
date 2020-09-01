@@ -5,7 +5,9 @@
  */
 package com.mycompany.lab;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +20,10 @@ public class Workspace {
 
     //Metodos
     public void agregarArchivo(String nombre, String contenido){
-        TextoArchivo archivo = new TextoArchivo(nombre, contenido);
+        TextoArchivo archivo = new TextoArchivo();
+        Date fechaActual = new Date();
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");                            
+        archivo.datoSet(formatoFecha.format(fechaActual), nombre, contenido);
         listaArchivos.add(archivo);
     }
     
