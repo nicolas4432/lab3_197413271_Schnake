@@ -39,9 +39,10 @@ public class Lab {
         System.out.println("4. push");
         System.out.println("5. status");
         System.out.println("6. Crear nuevo archivo");
-        System.out.println("7. Terminar simulacion");
+        System.out.println("7. Eliminar archivo");
+        System.out.println("8. Terminar simulacion");
         
-        while(!"7".equals(opcion)){
+        while(!"8".equals(opcion)){
         System.out.println("INTRODUZCA SU OPCIÓN: ");
         opcion = in.nextLine();
         
@@ -57,6 +58,7 @@ public class Lab {
                         repositorio.repoSet(autor, nombre);
                         break;
                     }
+                    break;
 
                 case "1":
                     if (repoCreado == 0){
@@ -117,9 +119,17 @@ public class Lab {
                     break;
 
                 case "7":
-                    System.out.println("Fin simulacion");
+                    if (repoCreado == 0){
+                        System.out.println("Repositorio no creado");
+                        break;
+                    }                    
+                    repositorio.delWol(repositorio);
                     break;
 
+                case "8":
+                    System.out.println("Fin simulacion");
+                    break;                    
+                    
                 default:
                     System.out.println("Opcion no valida");
                     break;
