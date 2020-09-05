@@ -1,32 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.mycompany.lab;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- *
- * @author nico4
+ * Una clase que representa a un archivo dentro del repositorio.
+ * Es un archivo que possee fecha de modificacion, nombre y contenido
+ * @version 1.0, 11/08/20
+ * @author Nicolas Schnake
  */
+
 public class TextoArchivo {
-	String fecha;
-	String nombre;
-        String contenido;
-        
-        // Constructor
-        //public TextoArchivo(String nombre, String contenido) {
-            //Date fechaActual = new Date();
-            //SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/YYYY");
-            //this.fecha = formatoFecha.format(fechaActual);
-            //this.nombre = nombre;
-            //this.contenido = contenido;
-        //}
+        //Atributos
+	String fecha;           //Fecha de creacion del archivo o modificacion
+	String nombre;          //Nombre del archivo
+        String contenido;       //Contenido del archivo
         
         //Metodos
+        /**
+         * Metodo Get para obetener datos del archivo
+         * @param archivo Archivo del cual se quiere obtener el dato
+         * @param dato String del nombre del dato que se requiere
+         * @return Retorna un String con el dato solicitado 
+         */
         public String datoGet(TextoArchivo archivo, String dato){
             String devolvio = new String();
             switch(dato){
@@ -44,7 +41,12 @@ public class TextoArchivo {
             }
             return devolvio;
         }
-        
+        /**
+         * Metodo Set para asignarle valores a los atributos del archivo
+         * @param fecha String con la fecha
+         * @param nombre String con el nombre del archivo
+         * @param contenido String con el contenido del archivo
+         */
         public void datoSet(String fecha, String nombre, String contenido){
             this.fecha = fecha;
             this.nombre = nombre;

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.mycompany.lab;
 
 import java.text.SimpleDateFormat;
@@ -11,54 +7,58 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- *
- * @author nico4
+ * Una clase que representa a un repositorio con las 4 zonas.
+ * Contiene a la zona Workspace, Index, Local y Remote repository
+ * @version 1.0, 11/08/20
+ * @author Nicolas Schnake
  */
+
 public class Repo {
     //Atributos
-    String autor = new String();
-    String nombreR = new String();
-    Workspace workspace = new Workspace();
-    Index index = new Index();
-    RemoteR remote = new RemoteR();
-    LocalR local = new LocalR();
-    
+    String autor = new String();                        //Nombre del autor
+    String nombreR = new String();                      //Nombre del repositorio
+    Workspace workspace = new Workspace();              //Objeto que representa al Workspace
+    Index index = new Index();                          //Objeto que representa al Index
+    RemoteR remote = new RemoteR();                     //Objeto que representa al Remote Repositori
+    LocalR local = new LocalR();                        //Objeto que representa al Local Repositori
     
     //Metodos
+    /**
+     * Agrega crea y archivos a la zona del Workspace
+     * @param repositorio Repositorio que se esta utilizando
+     */
     public void addWork(Repo repositorio){
-        Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);                        //Variable para pedir datos por consola
         
         System.out.println("");
-        System.out.println("Opcion elejida: 6");
-        System.out.println("Introdusca nombre del archivo:");
+        //Se pide el nombre del archivo
+        System.out.println("Introdusca nombre del archivo:");       
         String nombre = in.nextLine();
-        System.out.println("Ingrese el contenido:");
+        //Se pide el contenido del archivo
+        System.out.println("Ingrese el contenido:");                
         String contenido = in.nextLine();
-        
-        repositorio.workspace.agregarArchivo(nombre, contenido); 
-
-        //Para ver todos los archivos del workspace.
-        //for (TextoArchivo archivo2 : repositorio.workspace.listaArchivos){             
-        //System.out.println(archivo2.obtenerDato(archivo2, "contenido") + " " + archivo2.obtenerDato(archivo2, "fecha") + " " + archivo2.obtenerDato(archivo2, "nombre"));
-        //}
+        //Se agrega el archivo al Workspace
+        repositorio.workspace.agregarArchivo(nombre, contenido);    
     }
-    
+    /**
+     * Agrega archivos del Workspace al Index
+     * @param repositorio Repositorio que se esta utilizando
+     */
     public void add(Repo repositorio){
-        Scanner in = new Scanner(System.in);
-        String nombreArchivo = "";
-//        TextoArchivo archivo;
-        int largoIndex = 0;
-        int estabaEnIndex;
+        Scanner in = new Scanner(System.in);                        //Variable para pedir datos por consola
+        String nombreArchivo = "";                                  //Nombre del archivo
+        int largoIndex = 0;                                         //Largo del Index
+        int estabaEnIndex;                                          //Verificador si el archivo se encuentra en el index
         
         System.out.println("");
         System.out.println("Archivos actuales del Workspace:");
         
-        //Para ver todos los archivos del workspace
+        //Se muestran todos los archivos del workspace
         for (TextoArchivo archivoEnLista : repositorio.workspace.listaArchivos){             
             System.out.println("-" + archivoEnLista.datoGet(archivoEnLista, "nombre"));
         } 
         System.out.println("Ingrese nombre archivos, para salir escribir 00");
-        
+        //Mientras no se ingrese la opcion de salida 00 se sigue ejecutando la funcion 
         while(!"00".equals(nombreArchivo)){
             nombreArchivo = in.nextLine();
             //Recoror cada archivo en la lista de index
@@ -74,16 +74,18 @@ public class Repo {
                             estabaEnIndex = 1;
                             //y el contenido es distinto
                             if(!(archivoEnLista.datoGet(archivoEnLista, "contenido")).equals(archivoEnListaI.datoGet(archivoEnListaI, "contenido"))){
-                            repositorio.index.listaArchivos.remove(archivoEnListaI);
-                            //Creo nuevo archivo
-                            TextoArchivo archivo = new TextoArchivo();                         
-                            archivo.datoSet(archivoEnLista.datoGet(archivoEnLista, "fecha"), archivoEnLista.datoGet(archivoEnLista, "nombre"), archivoEnLista.datoGet(archivoEnLista, "contenido"));
-                            repositorio.index.listaArchivos.add(archivo);
-                            break;
+                                repositorio.index.listaArchivos.remove(archivoEnListaI);
+                                //Creo nuevo archivo
+                                TextoArchivo archivo = new TextoArchivo();                         
+                                archivo.datoSet(archivoEnLista.datoGet(archivoEnLista, "fecha"), archivoEnLista.datoGet(archivoEnLista, "nombre"), archivoEnLista.datoGet(archivoEnLista, "contenido"));
+                                //Y se agrega al index
+                                repositorio.index.listaArchivos.add(archivo);
+                                break;
                             }
                             break;
                         }
                     }
+                    //Si el archivo no estaba en el index se agrega
                     if (estabaEnIndex == 0){                        
                         TextoArchivo archivo = new TextoArchivo();                    
                         archivo.datoSet(archivoEnLista.datoGet(archivoEnLista, "fecha"), archivoEnLista.datoGet(archivoEnLista, "nombre"), archivoEnLista.datoGet(archivoEnLista, "contenido"));
@@ -92,28 +94,27 @@ public class Repo {
                     }
                 }
             }        
-        }
-        //Para ver que archivos tiene el index
-        //for (TextoArchivo archivo2 : repositorio.index.listaArchivos){             
-        //System.out.println(archivo2.obtenerDato(archivo2, "contenido") + " " + archivo2.obtenerDato(archivo2, "fecha") + " " + archivo2.obtenerDato(archivo2, "nombre"));
-        //}
-        
-     }
-    //Error al verificar si un archivo esta en la lista cambiar el metodo de busqueda
+        }   
+    }
+    /**
+     * Crea un commit y se agrega a al local repository
+     * @param repositorio Repositorio que se esta utilizando
+     */
     public void commit(Repo repositorio){
-        Scanner in = new Scanner(System.in);
-        Commit ultimoCommit;
-        //TextoArchivo archivosCommit;
-        int largoIndex = 0;
-        int existeDiferencia;
-        TextoArchivo archivoDif;
+        Scanner in = new Scanner(System.in);                        //Variable para pedir datos por consola
+        Commit ultimoCommit;                                        //Ultimo commit generado
+        int largoIndex = 0;                                         //Largo del index
+        int existeDiferencia;                                       //Verificador si exsiste diferencia entre commits
+        TextoArchivo archivoDif;                                    //Archivo presente o ausente al comparar commits
         
         System.out.println("");
+        //Se pide el nombre del autor del commit
         System.out.println("Ingrese nombre del autor:");
-        String autorC = in.nextLine();        
+        String autorC = in.nextLine();
+        //Se pide el comentario
         System.out.println("Ingrese su comentario:");
         String comentario = in.nextLine();
-        
+        //Se inicializa un commit con el nombre del autor y comentario
         Commit nuevoCommit = new Commit(autorC, comentario);
         
         //Copio todos los archivos del index al commit
@@ -124,7 +125,6 @@ public class Repo {
             largoIndex = largoIndex + 1;
         }
         
-//Aqui empezare a escribir
         //Si la zona local no esta vacia se realiza la busqueda de diferencias con el commit anterior
         if (!repositorio.local.listaCommits.isEmpty()){
             ultimoCommit = repositorio.local.listaCommits.get(repositorio.local.listaCommits.size() - 1);
@@ -156,7 +156,9 @@ public class Repo {
                     break;
                     }
                 }
+                //Se recorren los archivos de la lista diferencias para ver si el archivo actual no esta en la lista
                 for(TextoArchivo archivosDiferencia : nuevoCommit.diferencias){
+                    //Si esta el archivo no existe diferencia
                     if (archivosDiferencia.datoGet(archivosDiferencia, "nombre").equals(archivoCommit.datoGet(archivoCommit, "nombre")) && archivosDiferencia.datoGet(archivosDiferencia, "contenido").equals(archivoCommit.datoGet(archivoCommit, "contenido"))){
                     existeDiferencia = 0;
                     break;
@@ -168,54 +170,45 @@ public class Repo {
                     nuevoCommit.diferencias.add(archivoDif);
                 }              
             }            
-        }       
-/*        
-        if (!repositorio.local.listaCommits.isEmpty()){
-            ultimoCommit = repositorio.local.listaCommits.get(repositorio.local.listaCommits.size() - 1);
-            for (TextoArchivo archivo : ultimoCommit.listaArchivos){
-                //Si el archivo no esta ni nuevo commit y en la lista de diferencias se agrega
-                if((nuevoCommit.listaArchivos.indexOf(archivo) == -1 && nuevoCommit.diferencias.indexOf(archivo) == -1)){
-              //if(archivo.datoGet(archivo, "nombre") ==     
-                    TextoArchivo archivosCommit = new TextoArchivo();                        
-                    archivosCommit.datoSet(archivo.datoGet(archivo, "fecha"), archivo.datoGet(archivo, "nombre"), archivo.datoGet(archivo, "contenido"));
-                    nuevoCommit.diferencias.add(archivosCommit);                    
-                }
-            }
-            for (TextoArchivo archivo : nuevoCommit.listaArchivos){
-                //Si el archivo no estaba en el commit anterior ni en la lista de diferencias
-                 if((ultimoCommit.listaArchivos.indexOf(archivo) == -1 && nuevoCommit.diferencias.indexOf(archivo) == -1)){
-                    TextoArchivo archivosCommit = new TextoArchivo();                           
-                    archivosCommit.datoSet(archivo.datoGet(archivo, "fecha"), archivo.datoGet(archivo, "nombre"), archivo.datoGet(archivo, "contenido"));
-                    nuevoCommit.diferencias.add(archivosCommit);                    
-                }               
-            }
         }
-*/        
+        //Se agrega el nuevo commit
         repositorio.local.listaCommits.add(nuevoCommit);       
     }
-    
+    /**
+     * Copia los commits del local repository al remote 
+     * @param repositorio Repositorio que se esta utilizando
+     */
     public void push(Repo repositorio){
-        Commit comentario;
-        
+        Commit comentario;                          //Commit para copiar los commit de local a repo
+        //Se recoren todos los commit del repositorio local
         for (Commit comentarioLocal : repositorio.local.listaCommits){
+            //Si el commit no esta en el repositorio remote se agrega
             if (repositorio.remote.listaCommits.indexOf(comentarioLocal) == -1){
             comentario = comentarioLocal;
             repositorio.remote.listaCommits.add(comentario);
             }
         }
     }
-    
-    public void pull(Repo repositorio){ //error 
-        int existeArchivo;
+    /**
+     * Agrega al workspace todos los archivos de todos los commits que no esten en el workspace
+     * @param repositorio Repositorio que se esta utilizando
+     */    
+    public void pull(Repo repositorio){  
+        int existeArchivo;                                  //Verificador si el archivo esta en el workspace
+        //Se recorren todos los commit de remote
         for (Commit commitRemote : repositorio.remote.listaCommits){
+            //Se recorren todos los archivos del commit
             for (TextoArchivo archivoDeRemote : commitRemote.listaArchivos){
                 existeArchivo = 0;
+                //Se recorren todos los archivos del workspace
                 for (TextoArchivo archivoWork : repositorio.workspace.listaArchivos){
+                    //Si tienen el mismo archivo mi verificador cambia
                     if (archivoWork.datoGet(archivoWork, "nombre").equals(archivoDeRemote.datoGet(archivoDeRemote, "nombre"))){
                         existeArchivo = 1;
                         break;
                     }                   
                 }
+                //Si no se encontro el archivo se agrega a la lista de archivos del workspace
                 if (existeArchivo == 0){
                     TextoArchivo archivo = new TextoArchivo();                          
                     archivo.datoSet(archivoDeRemote.datoGet(archivoDeRemote, "fecha"), archivoDeRemote.datoGet(archivoDeRemote, "nombre"), archivoDeRemote.datoGet(archivoDeRemote, "contenido"));
@@ -224,21 +217,23 @@ public class Repo {
             }
         }       
     }
-    
+    /**
+     * Elimina archivos del workspace
+     * @param repositorio Repositorio que se esta utilizando
+     */
     public void delWol(Repo repositorio){
-        Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);                        //Variable para pedir datos por consola
         String nombreArchivo = "";
-//        TextoArchivo archivo;
-        
+
         System.out.println("");
         System.out.println("Archivos actuales del Workspace:");
         
-        //Para ver todos los archivos del workspace
+        //Para imprimir todos los archivos del workspace
         for (TextoArchivo archivoEnLista : repositorio.workspace.listaArchivos){             
             System.out.println("-" + archivoEnLista.datoGet(archivoEnLista, "nombre"));
         } 
         System.out.println("Ingrese nombre archivos a eliminar, para salir escribir 00");
-        
+        //Mientras no se ingrese la opcion de salida 00 se sigue ejecutando la funcion 
         while(!"00".equals(nombreArchivo)){
             nombreArchivo = in.nextLine();
             //Recoror cada archivo en la lista de index
@@ -251,16 +246,14 @@ public class Repo {
                     
                 }
             }        
-        }
-        //Para ver que archivos tiene el index
-        //for (TextoArchivo archivo2 : repositorio.index.listaArchivos){             
-        //System.out.println(archivo2.obtenerDato(archivo2, "contenido") + " " + archivo2.obtenerDato(archivo2, "fecha") + " " + archivo2.obtenerDato(archivo2, "nombre"));
-        //}
-        
+        }  
     }
-        
-    
-    
+    /**
+     * Metodo Get para obtener datos del repositorio
+     * @param repostiroio Repositorio que se esta utilizando
+     * @param dato String nombre del dato que se desea obtener
+     * @return Se devuelve el dato pedido como String
+     */
     public String repoGet(Repo repostiroio, String dato){
         String datoDevuelto = new String();
             
@@ -276,9 +269,13 @@ public class Repo {
         }        
         return datoDevuelto;
     }
-    
+    /**
+     * Metodo Set para asignarle nombre y autor al repositorio
+     * @param autor String con el nombre del autor del repositorio
+     * @param nombre String con el nombre del repositorio
+     */
     public void repoSet(String autor, String nombre){  
-        this.autor = autor;
+        this.autor = autor;                        
         this.nombreR = nombre;
     }
 }
